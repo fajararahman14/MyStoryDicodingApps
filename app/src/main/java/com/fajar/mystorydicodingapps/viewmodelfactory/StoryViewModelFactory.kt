@@ -9,7 +9,7 @@ import com.fajar.mystorydicodingapps.ui.main.StoryViewModel
 
 class StoryViewModelFactory(
     private val storyRepository: StoryRepository
-) : ViewModelProvider.NewInstanceFactory(){
+) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -30,4 +30,5 @@ class StoryViewModelFactory(
                 instance ?: StoryViewModelFactory(Injection.provideRepository())
             }.also { instance = it }
     }
+
 }

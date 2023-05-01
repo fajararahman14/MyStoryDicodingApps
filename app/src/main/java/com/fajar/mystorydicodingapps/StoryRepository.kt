@@ -36,8 +36,6 @@ class StoryRepository private constructor(
                         )
                         storiesList.add(stories)
                     }
-                    Log.d(TAG, "$storiesList")
-                    Log.d(TAG, "Number of stories obtained: ${storiesList.size}")
                     result.value = Result.Success(storiesList)
                 } else {
                     result.value = Result.Error(response.message())

@@ -3,6 +3,8 @@ package com.fajar.mystorydicodingapps.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +13,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.fajar.mystorydicodingapps.ui.detail.DetailActivity
+import com.fajar.mystorydicodingapps.R
 import com.fajar.mystorydicodingapps.databinding.ActivityMainBinding
 import com.fajar.mystorydicodingapps.local.datastore.UserPreference
 import com.fajar.mystorydicodingapps.viewmodelfactory.StoryViewModelFactory
@@ -34,8 +38,8 @@ class MainActivity : AppCompatActivity() {
 
 
         setupViewModel()
-        var adapter = ListStoryAdapter()
-        adapter.notifyDataSetChanged()
+        val storyAdapter = ListStoryAdapter()
+
 
 
 
@@ -63,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                         is Result.Success -> {
                             showLoading(false)
                             val storyData = result.data
-                            adapter.submitList(storyData)
+                            storyAdapter.submitList(storyData)
                         }
 
                         is Result.Error -> {
@@ -78,11 +82,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.rvStory.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
-            setAdapter(adapter)
+            adapter = storyAdapter
         }
+
     }
+
 
 
     private fun showLoading(isLoading: Boolean) {
@@ -102,5 +108,27 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.add_story_menu -> {
+                Intent(this, DetailActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
+            R.id.logout_menu -> {
+                mainViewModel.logout()
+                finish()
+                Intent(this, LoginActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

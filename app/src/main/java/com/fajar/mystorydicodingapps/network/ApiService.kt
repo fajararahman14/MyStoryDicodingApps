@@ -1,7 +1,10 @@
 package com.fajar.mystorydicodingapps.network
 
 
+import com.fajar.mystorydicodingapps.network.story.FileUploadResponse
 import com.fajar.mystorydicodingapps.network.story.StoryResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -27,4 +30,12 @@ interface ApiService {
         @Query("page") page : Int?,
         @Query("size") size : Int?,
     ): Call<StoryResponse>
+
+    @Multipart
+    @POST("stories")
+    fun uploadStory(
+        @Header("Authorization") token : String,
+        @Part photo : MultipartBody.Part,
+        @Part("description") description : RequestBody,
+    ): Call<FileUploadResponse>
 }
