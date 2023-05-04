@@ -1,6 +1,5 @@
 package com.fajar.mystorydicodingapps.network
 
-import android.content.Context
 import com.fajar.mystorydicodingapps.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

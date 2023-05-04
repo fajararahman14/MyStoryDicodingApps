@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.fajar.mystorydicodingapps.ui.detail.DetailActivity
 import com.fajar.mystorydicodingapps.R
 import com.fajar.mystorydicodingapps.databinding.IvItemStoryBinding
 import com.fajar.mystorydicodingapps.network.story.StoryItem
+import com.fajar.mystorydicodingapps.ui.detail.DetailActivity
 import com.fajar.mystorydicodingapps.utils.withDateFormat
 
 
@@ -30,10 +30,10 @@ class ListStoryAdapter : ListAdapter<StoryItem, ListStoryAdapter.ListViewHolder>
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val listStory = getItem(position)
         holder.bind(listStory)
-        var imgPhoto: ImageView = holder.itemView.findViewById(R.id.iv_story)
-        var tvName: TextView = holder.itemView.findViewById(R.id.tv_name)
-        var tvDate: TextView = holder.itemView.findViewById(R.id.tv_created_at)
-        var tvDescription: TextView = holder.itemView.findViewById(R.id.tv_description)
+        val imgPhoto: ImageView = holder.itemView.findViewById(R.id.iv_story)
+        val tvName: TextView = holder.itemView.findViewById(R.id.tv_name)
+        val tvDate: TextView = holder.itemView.findViewById(R.id.tv_created_at)
+        val tvDescription: TextView = holder.itemView.findViewById(R.id.tv_description)
 
         holder.itemView.setOnClickListener {
             val data = StoryItem(

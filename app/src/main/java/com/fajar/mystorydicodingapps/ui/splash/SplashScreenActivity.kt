@@ -5,15 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import com.fajar.mystorydicodingapps.R
+import com.fajar.mystorydicodingapps.databinding.ActivitySplashScreenBinding
 import com.fajar.mystorydicodingapps.local.datastore.UserPreference
-import com.fajar.mystorydicodingapps.ui.login.LoginActivity
 import com.fajar.mystorydicodingapps.ui.login.LoginViewModel
 import com.fajar.mystorydicodingapps.ui.main.MainActivity
+import com.fajar.mystorydicodingapps.ui.register.RegisterActivity
 import com.fajar.mystorydicodingapps.viewmodelfactory.ViewModelFactory
 
 
@@ -23,15 +25,20 @@ class SplashScreenActivity : AppCompatActivity() {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
 
     lateinit var handler: Handler
+    private lateinit var binding : ActivitySplashScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash_screen)
+        binding = ActivitySplashScreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.hide()
         handler = Handler()
         handler.postDelayed({
             setupViewModel()
         }, TIME_SPLASH_SCREEN)
+
+
+
     }
 
     private fun setupViewModel() {
@@ -48,10 +55,16 @@ class SplashScreenActivity : AppCompatActivity() {
     private fun loginCheck() {
         loginViewModel.getUser().observe(this) { user ->
             if (user.isLogin) {
+
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
-                startActivity(Intent(this, LoginActivity::class.java))
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this,
+                    Pair(binding.ivDicodingLogo, "image_transition")
+                )
+                val intent = Intent(this, RegisterActivity::class.java)
+                startActivity(intent, options.toBundle())
                 finish()
             }
         }

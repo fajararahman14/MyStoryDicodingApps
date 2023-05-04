@@ -13,14 +13,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.fajar.mystorydicodingapps.ui.detail.DetailActivity
 import com.fajar.mystorydicodingapps.R
+import com.fajar.mystorydicodingapps.Result
 import com.fajar.mystorydicodingapps.databinding.ActivityMainBinding
 import com.fajar.mystorydicodingapps.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.ui.login.LoginActivity
+import com.fajar.mystorydicodingapps.ui.story.AddStoryActivity
 import com.fajar.mystorydicodingapps.viewmodelfactory.StoryViewModelFactory
 import com.fajar.mystorydicodingapps.viewmodelfactory.ViewModelFactory
-import com.fajar.mystorydicodingapps.Result
-import com.fajar.mystorydicodingapps.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_story_menu -> {
-                Intent(this, DetailActivity::class.java).also {
+                Intent(this, AddStoryActivity::class.java).also {
                     startActivity(it)
                 }
             }

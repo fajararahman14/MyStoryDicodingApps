@@ -10,12 +10,12 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.fajar.mystorydicodingapps.ui.main.MainActivity
 import com.fajar.mystorydicodingapps.R
-import com.fajar.mystorydicodingapps.viewmodelfactory.ViewModelFactory
 import com.fajar.mystorydicodingapps.databinding.ActivityLoginBinding
 import com.fajar.mystorydicodingapps.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.ui.main.MainActivity
 import com.fajar.mystorydicodingapps.ui.register.RegisterActivity
+import com.fajar.mystorydicodingapps.viewmodelfactory.ViewModelFactory
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -27,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         viewModel = ViewModelProvider(
             this,

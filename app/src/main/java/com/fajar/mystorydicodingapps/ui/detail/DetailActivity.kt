@@ -21,7 +21,11 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.hide()
+        val supportActionBar = supportActionBar
+        supportActionBar?.title = ""
+        supportActionBar?.elevation = 0f
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
 
         story = intent.getParcelableExtra(EXTRA_DATA)

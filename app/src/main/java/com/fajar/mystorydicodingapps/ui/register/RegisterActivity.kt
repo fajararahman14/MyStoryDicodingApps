@@ -2,12 +2,13 @@ package com.fajar.mystorydicodingapps.ui.register
 
 import android.content.Intent
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.fajar.mystorydicodingapps.ui.login.LoginActivity
 import com.fajar.mystorydicodingapps.R
 import com.fajar.mystorydicodingapps.databinding.ActivityRegisterBinding
+import com.fajar.mystorydicodingapps.ui.login.LoginActivity
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -21,6 +22,9 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
+
+        window.sharedElementEnterTransition = TransitionInflater.from(this)
+            .inflateTransition(android.R.transition.move)
 
         binding.btnRegister.setOnClickListener {
             val name = binding.edName.text.toString()

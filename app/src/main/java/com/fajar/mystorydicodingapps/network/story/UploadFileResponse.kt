@@ -2,7 +2,7 @@ package com.fajar.mystorydicodingapps.network.story
 
 import com.google.gson.annotations.SerializedName
 
-data class FileUploadResponse(
+data class UploadFileResponse(
     @field:SerializedName("error")
     val error : Boolean,
 
