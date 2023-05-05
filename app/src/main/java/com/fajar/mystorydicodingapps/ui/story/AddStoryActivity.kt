@@ -202,7 +202,10 @@ class AddStoryActivity : AppCompatActivity() {
                 isBackCamera
             )
             binding.ivStoryPhoto.setImageBitmap(result)
-        }
+        } else {
+            @Suppress("DEPRECATION")
+            it.data?.getSerializableExtra("picture")
+        } as? File
     }
 
 

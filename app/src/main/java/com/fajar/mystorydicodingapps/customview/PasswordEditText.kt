@@ -40,8 +40,8 @@ class PasswordEditText : AppCompatEditText, View.OnTouchListener {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val text = p0.toString()
-                if ((text.length ?: 0) < 6) {
-                    setError("Password kurang dari 6 karakter", errorIcon)
+                if ((text.length ?: 0) < 8) {
+                    setError("Password kurang dari 8 karakter", errorIcon)
                     setCompoundDrawablesWithIntrinsicBounds(null, null, errorIcon, null)
                 } else {
                     setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)

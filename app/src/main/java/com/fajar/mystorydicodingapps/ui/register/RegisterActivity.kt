@@ -45,7 +45,7 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                password.length <= 6 -> {
+                password.length <= 8 -> {
                     Toast.makeText(
                         this,
                         getString(R.string.UI_validate_invalid_password),

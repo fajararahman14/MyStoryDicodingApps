@@ -22,7 +22,7 @@
     <string name="UI_info_failed_login_user">Login failed, E-mail or password incorrect</string>
     <string name="UI_validate_empty_email">E-mail must be filled</string>
     <string name="UI_validate_empty_password">Password must be filled</string>
-    <string name="UI_validate_invalid_password">Password must be at least 6 characters</string>
+    <string name="UI_validate_invalid_password">Password must be at least 8 characters</string>
     <string name="UI_info_successful_register_user">Register Success</string>
     <string name="UI_info_successful_login_user">Login Success</string>
     <string name="add">Add</string>

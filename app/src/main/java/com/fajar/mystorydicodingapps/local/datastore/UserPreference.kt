@@ -52,6 +52,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         dataStore.edit { preferences ->
             preferences[KEY_LOGIN_STATE] = false
             preferences.remove(KEY_LOGIN_STATE)
+            preferences.remove(KEY_TOKEN)
         }
     }
 

@@ -9,7 +9,6 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.os.Environment
 import android.widget.TextView
-import com.fajar.mystorydicodingapps.R
 import java.io.*
 import java.text.DateFormat
 import java.text.ParseException
