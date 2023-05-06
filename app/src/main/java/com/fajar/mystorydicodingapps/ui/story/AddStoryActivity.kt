@@ -97,7 +97,10 @@ class AddStoryActivity : AppCompatActivity() {
                     }
                     else -> {
                         if (getFile != null) {
-                            val file = reduceFileImage(getFile as File)
+                            val file = getFile as File
+                            if(file.length() > 1000000){
+                                reduceFileImage(file)
+                            }
                             val description = binding.edDescription.text.toString()
                                 .toRequestBody("text/plain".toMediaType())
                             val requestImageFile =
@@ -175,7 +178,6 @@ class AddStoryActivity : AppCompatActivity() {
             }
         }
 
-
     }
 
     private val launcherGallery = registerForActivityResult(
@@ -191,21 +193,20 @@ class AddStoryActivity : AppCompatActivity() {
 
     private val launcherCameraX = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode == CAMERA_X_RESULT) {
-            val myFile = it.data?.getSerializableExtra("picture") as File
-            val isBackCamera = it.data?.getBooleanExtra("isBackCamera", true) as Boolean
+    ) { result ->
+        if (result.resultCode == CAMERA_X_RESULT) {
+            val myFile = result.data?.getSerializableExtra("picture") as? File
+            val isBackCamera = result.data?.getBooleanExtra("isBackCamera", true) as Boolean
 
-            getFile = myFile
-            val result = rotateBitmap(
-                BitmapFactory.decodeFile(getFile?.path),
-                isBackCamera
-            )
-            binding.ivStoryPhoto.setImageBitmap(result)
+            myFile?.let { file ->
+                getFile = file
+                val resultBitmap = rotateBitmap(BitmapFactory.decodeFile(getFile?.path), isBackCamera)
+                binding.ivStoryPhoto.setImageBitmap(resultBitmap)
+            }
         } else {
             @Suppress("DEPRECATION")
-            it.data?.getSerializableExtra("picture")
-        } as? File
+            result.data?.getSerializableExtra("picture") as? File
+        }
     }
 
 

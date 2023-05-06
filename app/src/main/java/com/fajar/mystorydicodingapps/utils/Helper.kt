@@ -9,11 +9,16 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.os.Environment
 import android.widget.TextView
-import java.io.*
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 
 private const val FILENAME_FORMAT = "dd-MMM-yyyy"
@@ -54,6 +59,7 @@ fun createFile(application: Application): File {
 
 fun rotateBitmap(bitmap: Bitmap, isBackCamera: Boolean = false): Bitmap {
     val matrix = Matrix()
+
     return if (isBackCamera) {
         matrix.postRotate(90f)
         Bitmap.createBitmap(bitmap,
@@ -79,6 +85,7 @@ fun rotateBitmap(bitmap: Bitmap, isBackCamera: Boolean = false): Bitmap {
             true)
     }
 }
+
 
 fun uriToFile(selectedImg: Uri, context: Context): File {
     val contentResolver: ContentResolver = context.contentResolver
