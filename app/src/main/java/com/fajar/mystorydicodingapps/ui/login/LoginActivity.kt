@@ -57,9 +57,9 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     }
-                }
-                else{
-                    Toast.makeText(this, R.string.UI_info_failed_login_user, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, R.string.UI_info_failed_login_user, Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
             vm.loading.observe(this) { state ->

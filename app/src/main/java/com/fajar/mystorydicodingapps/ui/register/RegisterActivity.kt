@@ -38,7 +38,7 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                !email.contains("@") -> {
+                !binding.edEmail.error.isNullOrEmpty() -> {
                     Toast.makeText(
                         this,
                         getString(R.string.UI_validate_invalid_email),
