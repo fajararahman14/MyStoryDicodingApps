@@ -42,4 +42,9 @@
     <string name="insert_your_picture">Insert your picture first</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="maps">Maps</string>
+    <string name="detail_status">Failed tto load Detail Data</string>
+    <string name="enable_location">Unable to get location. Enable your gps</string>
+    <string name="share_location">Share Location ?</string>
+    <string name="access_not_granted">Access is not Granted</string>
+    <string name="add_string_failed">Failed to create story</string>
 </resources>

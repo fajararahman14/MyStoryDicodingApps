@@ -7,11 +7,13 @@ import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -20,24 +22,22 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.fajar.mystorydicodingapps.R
+import com.fajar.mystorydicodingapps.Result
 import com.fajar.mystorydicodingapps.databinding.ActivityAddStoryBinding
 import com.fajar.mystorydicodingapps.local.datastore.UserPreference
-import com.fajar.mystorydicodingapps.network.ApiConfig
-import com.fajar.mystorydicodingapps.network.story.UploadFileResponse
 import com.fajar.mystorydicodingapps.ui.main.MainActivity
 import com.fajar.mystorydicodingapps.ui.main.MainViewModel
 import com.fajar.mystorydicodingapps.utils.reduceFileImage
 import com.fajar.mystorydicodingapps.utils.rotateBitmap
 import com.fajar.mystorydicodingapps.utils.uriToFile
 import com.fajar.mystorydicodingapps.viewmodelfactory.ViewModelFactory
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
@@ -53,6 +53,10 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private var getFile: File? = null
+    private var myLocation: Location? = null
+    private val addStoryViewModel by viewModels<AddStoryViewModel>()
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     private lateinit var binding: ActivityAddStoryBinding
     private lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +78,9 @@ class AddStoryActivity : AppCompatActivity() {
                 CODE_REQUEST_PERMISSION
             )
         }
-
+        addStoryViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
 
 
         binding.btnCamera.setOnClickListener {
@@ -89,6 +95,10 @@ class AddStoryActivity : AppCompatActivity() {
             val chooser = Intent.createChooser(intent, "Pilih gambar")
             launcherGallery.launch(chooser)
         }
+        fusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(this@AddStoryActivity)
+        getMyLocation()
+
         binding.apply {
             btnUploadStory.setOnClickListener {
                 when {
@@ -98,7 +108,7 @@ class AddStoryActivity : AppCompatActivity() {
                     else -> {
                         if (getFile != null) {
                             val file = getFile as File
-                            if(file.length() > 1000000){
+                            if (file.length() > 1000000) {
                                 reduceFileImage(file)
                             }
                             val description = binding.edDescription.text.toString()
@@ -111,73 +121,59 @@ class AddStoryActivity : AppCompatActivity() {
                                     file.name,
                                     requestImageFile
                                 )
+                            val lat = myLocation?.latitude?.toFloat()
+                            val lon = myLocation?.longitude?.toFloat()
 
                             mainViewModel.getUser().observe(this@AddStoryActivity) { user ->
                                 if (user.isLogin) {
-                                    val client = ApiConfig.getApiService().uploadStory(
-                                        "Bearer ${user.token}",
-                                        imageMultipart,
-                                        description
+                                    addStoryViewModel.addStory(
+                                        token = user.token,
+                                        photo = imageMultipart,
+                                        description = description,
+                                        lat = lat,
+                                        lon = lon
                                     )
-                                    showLoading(true)
-                                    client.enqueue(object : Callback<UploadFileResponse> {
-                                        override fun onResponse(
-                                            call: Call<UploadFileResponse>,
-                                            response: Response<UploadFileResponse>
-                                        ) {
-                                            if (response.isSuccessful) {
-                                                val responseBody = response.body()
-                                                if (responseBody != null && !responseBody.error) {
-                                                    showLoading(false)
-                                                    Toast.makeText(
-                                                        this@AddStoryActivity,
-                                                        responseBody.message,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                    addStoryViewModel.addStoryResult.observe(this@AddStoryActivity) { result ->
+                                        when (result) {
+                                            is Result.Loading -> showLoading(true)
 
-                                                    val intent = Intent(
-                                                        this@AddStoryActivity,
-                                                        MainActivity::class.java
-                                                    )
-                                                    startActivity(intent)
-                                                    finish()
-                                                } else {
-                                                    showLoading(false)
-                                                    Toast.makeText(
-                                                        this@AddStoryActivity,
-                                                        response.message(),
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
+                                            is Result.Success -> {
+                                                Toast.makeText(
+                                                    this@AddStoryActivity,
+                                                    resources.getString(R.string.add_story),
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+
+                                                val intent = Intent(
+                                                    this@AddStoryActivity,
+                                                    MainActivity::class.java
+                                                )
+                                                startActivity(intent)
+                                            }
+
+                                            is Result.Error -> {
+                                                Toast.makeText(
+                                                    this@AddStoryActivity,
+                                                    resources.getString(R.string.add_string_failed),
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                             }
                                         }
-
-                                        override fun onFailure(
-                                            call: Call<UploadFileResponse>,
-                                            t: Throwable
-                                        ) {
-                                            showLoading(false)
-                                            Toast.makeText(
-                                                this@AddStoryActivity,
-                                                getString(R.string.retrofit_error),
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                    })
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        this@AddStoryActivity,
+                                        getString(R.string.insert_your_picture),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
-                        } else {
-                            Toast.makeText(
-                                this@AddStoryActivity,
-                                getString(R.string.insert_your_picture),
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
                     }
                 }
+
             }
         }
-
     }
 
     private val launcherGallery = registerForActivityResult(
@@ -200,7 +196,8 @@ class AddStoryActivity : AppCompatActivity() {
 
             myFile?.let { file ->
                 getFile = file
-                val resultBitmap = rotateBitmap(BitmapFactory.decodeFile(getFile?.path), isBackCamera)
+                val resultBitmap =
+                    rotateBitmap(BitmapFactory.decodeFile(getFile?.path), isBackCamera)
                 binding.ivStoryPhoto.setImageBitmap(resultBitmap)
             }
         } else {
@@ -211,7 +208,10 @@ class AddStoryActivity : AppCompatActivity() {
 
 
     private fun getAllpermissionGranted() = REQUIRED_PERMISSION.all {
-        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(
+            baseContext,
+            it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onRequestPermissionsResult(
@@ -225,12 +225,71 @@ class AddStoryActivity : AppCompatActivity() {
             if (!getAllpermissionGranted()) {
                 Toast.makeText(
                     this,
-                    "Access is not Granted",
+                    getString(R.string.access_not_granted),
                     Toast.LENGTH_SHORT
                 ).show()
                 finish()
             }
         }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
+                getMyLocation()
+            }
+
+            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
+                getMyLocation()
+            }
+
+            else -> {
+                binding.swLocation.isChecked = false
+                binding.swLocation.isEnabled = false
+            }
+        }
+    }
+
+    private fun getMyLocation() {
+        if (
+            checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if (it != null) {
+                    myLocation = it
+                } else {
+                    Toast.makeText(
+                        this,
+                        resources.getString(R.string.enable_location),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        } else {
+            requestPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
+
+    private fun checkPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun allPermissionGranted() = REQUIRED_PERMISSION.all {
+        ContextCompat.checkSelfPermission(
+            baseContext,
+            it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun setupViewModel() {
@@ -243,10 +302,6 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 }

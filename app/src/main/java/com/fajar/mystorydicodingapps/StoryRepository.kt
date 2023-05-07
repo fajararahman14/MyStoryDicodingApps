@@ -56,32 +56,7 @@ class StoryRepository private constructor(
         return result
     }
 
-    fun addStory(token: String, imageFile: MultipartBody.Part, description: RequestBody) {
-        val client = apiService.uploadStory(token, imageFile, description)
-        client.enqueue(object : Callback<UploadFileResponse>{
-            override fun onResponse(
-                call: Call<UploadFileResponse>,
-                response: Response<UploadFileResponse>
-            ) {
-                if(response.isSuccessful){
-                    val responseBody = response.body()
-                    if(responseBody != null){
-                        if(!responseBody.error){
-                            Log.d(TAG, response.message())
-                        }
-                    } else{
-                        Log.e(TAG, response.message())
-                    }
-                }
-            }
 
-            override fun onFailure(call: Call<UploadFileResponse>, t: Throwable) {
-                t.message?.let { Log.e(TAG, it) }
-                errorMessage.postValue(t.message.toString())
-            }
-
-        })
-    }
 
     companion object {
         @Volatile
