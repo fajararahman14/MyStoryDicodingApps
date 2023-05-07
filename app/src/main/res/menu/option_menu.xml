@@ -8,8 +8,14 @@
         android:title="@string/add"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/maps_menu"
+        android:icon="@drawable/ic_map"
+        android:title="@string/maps"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/logout_menu"
         android:icon="@drawable/ic_logout"
         android:title="@string/logout"
         app:showAsAction="ifRoom" />
+
 </menu>

@@ -18,6 +18,7 @@ import com.fajar.mystorydicodingapps.Result
 import com.fajar.mystorydicodingapps.databinding.ActivityMainBinding
 import com.fajar.mystorydicodingapps.local.datastore.UserPreference
 import com.fajar.mystorydicodingapps.ui.login.LoginActivity
+import com.fajar.mystorydicodingapps.ui.maps.MapsActivity
 import com.fajar.mystorydicodingapps.ui.story.AddStoryActivity
 import com.fajar.mystorydicodingapps.viewmodelfactory.StoryViewModelFactory
 import com.fajar.mystorydicodingapps.viewmodelfactory.ViewModelFactory
@@ -41,8 +42,6 @@ class MainActivity : AppCompatActivity() {
         val storyAdapter = ListStoryAdapter()
 
 
-
-
         val factory: StoryViewModelFactory = StoryViewModelFactory.getInstance(this)
         val storyViewModel: StoryViewModel by viewModels {
             factory
@@ -51,7 +50,8 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = ViewModelProvider(
             this,
             ViewModelFactory(
-                UserPreference.getInstance(dataStore))
+                UserPreference.getInstance(dataStore)
+            )
         )[MainViewModel::class.java]
 
         mainViewModel.getUser().observe(this) { user ->
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 binding.tvTitle.text = "Welcome,\n${user.name}"
 
                 storyViewModel.getAllStories("Bearer ${user.token}").observe(this) { result ->
-                    when(result) {
+                    when (result) {
                         is Result.Loading -> {
                             showLoading(true)
                         }
@@ -90,7 +90,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.progressBar.visibility = View.VISIBLE
@@ -103,12 +102,15 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = ViewModelProvider(
             this,
             ViewModelFactory(
-                UserPreference.getInstance(dataStore)))[MainViewModel::class.java]
+                UserPreference.getInstance(dataStore)
+            )
+        )[MainViewModel::class.java]
     }
 
     override fun onDestroy() {
         super.onDestroy()
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.option_menu, menu)
         return super.onCreateOptionsMenu(menu)
@@ -125,6 +127,11 @@ class MainActivity : AppCompatActivity() {
                 mainViewModel.logout()
                 finish()
                 Intent(this, LoginActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
+            R.id.maps_menu -> {
+                Intent(this, MapsActivity::class.java).also {
                     startActivity(it)
                 }
             }
