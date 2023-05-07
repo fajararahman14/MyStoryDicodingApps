@@ -57,7 +57,14 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setupObservers() {
         detailViewModel.isLoading.observe(this) { showLoading(it) }
-        mainViewModel.getUser().observe(this) { user -> user?.token?.let { detailViewModel.detailStory(it, story?.id.orEmpty()) } }
+        mainViewModel.getUser().observe(this) { user ->
+            user?.token?.let {
+                detailViewModel.detailStory(
+                    it,
+                    story?.id.orEmpty()
+                )
+            }
+        }
         detailViewModel.storyResult.observe(this) { result ->
             when (result) {
                 is Result.Loading -> showLoading(true)
@@ -72,10 +79,38 @@ class DetailActivity : AppCompatActivity() {
         val tvDate = binding.tvCreatedAt
         val tvDescription = binding.tvDescription
         val image = binding.ivStory
-
+        val tvLon = binding.tvLon
+        val tvLat = binding.tvLat
         tvName.text = story.name
         tvDate.withDateFormat(story.createdAt)
         tvDescription.text = story.description
+
+        val latDouble = try {
+            story.lat?.toDouble() ?: 0.0
+        } catch (e: NumberFormatException) {
+            0.0
+        }
+
+        val lonDouble = try {
+            story.lon?.toDouble() ?: 0.0
+        } catch (e: NumberFormatException) {
+            0.0
+        }
+
+        if (latDouble != 0.0 && lonDouble != 0.0) {
+            tvLon.text = "Lon : ${story.lon}"
+            tvLat.text = "Lat : ${story.lat}"
+        } else {
+            tvLon.text = "Lon : N/A"
+            tvLat.text = "Lat : N/A"
+        }
+
+        Glide.with(binding.root)
+            .load(story.photoUrl)
+            .placeholder(R.drawable.ic_replay)
+            .into(image)
+
+
 
         Glide.with(binding.root)
             .load(story.photoUrl)
