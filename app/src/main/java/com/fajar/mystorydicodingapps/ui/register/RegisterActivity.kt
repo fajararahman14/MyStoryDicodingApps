@@ -31,7 +31,7 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.edEmail.text.toString()
             val password = binding.edPassword.text.toString()
             when {
-                email.isEmpty() || password.isEmpty() || name.isEmpty() -> {
+                !binding.edEmail.error.isNullOrEmpty() || !binding.edPassword.error.isNullOrEmpty() || !binding.edName.error.isNullOrEmpty() -> {
                     Toast.makeText(
                         this,
                         getString(R.string.UI_validate_empty_name_email_password),
@@ -45,7 +45,7 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                password.length <= 8 -> {
+                !binding.edPassword.error.isNullOrEmpty() -> {
                     Toast.makeText(
                         this,
                         getString(R.string.UI_validate_invalid_password),
