@@ -57,9 +57,9 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     }
-                }
-                else{
-                    Toast.makeText(this, R.string.UI_info_failed_login_user, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, R.string.UI_info_failed_login_user, Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
             vm.loading.observe(this) { state ->
@@ -71,14 +71,14 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.edEmail.text.toString()
             val password = binding.edPassword.text.toString()
             when {
-                email.isEmpty() -> {
+                !binding.edEmail.error.isNullOrEmpty() -> {
                     Toast.makeText(
                         this,
                         getString(R.string.UI_validate_empty_email),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                password.isEmpty() -> {
+                !binding.edPassword.error.isNullOrEmpty() -> {
                     Toast.makeText(
                         this,
                         getString(R.string.UI_validate_empty_password),
