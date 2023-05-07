@@ -1,6 +1,7 @@
 package com.fajar.mystorydicodingapps.network
 
 
+import com.fajar.mystorydicodingapps.network.story.DetailStoryResponse
 import com.fajar.mystorydicodingapps.network.story.StoryResponse
 import com.fajar.mystorydicodingapps.network.story.UploadFileResponse
 import okhttp3.MultipartBody
@@ -30,6 +31,12 @@ interface ApiService {
         @Query("page") page : Int?,
         @Query("size") size : Int?,
     ): Call<StoryResponse>
+
+    @GET("stories/{id}")
+    fun getDetailStory(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ) : Call<DetailStoryResponse>
 
     @Multipart
     @POST("stories")

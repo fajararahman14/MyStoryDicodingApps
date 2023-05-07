@@ -40,4 +40,5 @@
     <string name="retrofit_error">Retrofit Error</string>
     <string name="invalid_date">Invalid Date</string>
     <string name="insert_your_picture">Insert your picture first</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
