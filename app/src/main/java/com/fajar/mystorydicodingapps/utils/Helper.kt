@@ -9,16 +9,11 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.os.Environment
 import android.widget.TextView
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.*
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 
 private const val FILENAME_FORMAT = "dd-MMM-yyyy"
