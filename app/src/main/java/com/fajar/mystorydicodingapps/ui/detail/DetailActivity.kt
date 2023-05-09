@@ -86,13 +86,13 @@ class DetailActivity : AppCompatActivity() {
         tvDescription.text = story.description
 
         val latDouble = try {
-            story.lat?.toDouble() ?: 0.0
+            story.lat.toDouble()
         } catch (e: NumberFormatException) {
             0.0
         }
 
         val lonDouble = try {
-            story.lon?.toDouble() ?: 0.0
+            story.lon.toDouble()
         } catch (e: NumberFormatException) {
             0.0
         }

@@ -1,6 +1,5 @@
 package com.fajar.mystorydicodingapps.ui.maps
 
-import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

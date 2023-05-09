@@ -8,9 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import com.fajar.mystorydicodingapps.network.ApiService
 import com.fajar.mystorydicodingapps.network.story.StoryItem
 import com.fajar.mystorydicodingapps.network.story.StoryResponse
-import com.fajar.mystorydicodingapps.network.story.UploadFileResponse
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
