@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.fajar.mystorydicodingapps.R
 import com.fajar.mystorydicodingapps.Result
 import com.fajar.mystorydicodingapps.databinding.ActivityDetailBinding
-import com.fajar.mystorydicodingapps.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.data.local.datastore.UserPreference
 import com.fajar.mystorydicodingapps.network.story.StoryItem
 import com.fajar.mystorydicodingapps.ui.main.MainViewModel
 import com.fajar.mystorydicodingapps.utils.withDateFormat

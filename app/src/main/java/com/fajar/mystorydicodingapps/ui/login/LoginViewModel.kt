@@ -3,8 +3,8 @@ package com.fajar.mystorydicodingapps.ui.login
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
-import com.fajar.mystorydicodingapps.entity.EntityUser
-import com.fajar.mystorydicodingapps.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.data.entity.EntityUser
+import com.fajar.mystorydicodingapps.data.local.datastore.UserPreference
 import com.fajar.mystorydicodingapps.network.ApiConfig
 import com.fajar.mystorydicodingapps.network.ResponseLogin
 import kotlinx.coroutines.launch

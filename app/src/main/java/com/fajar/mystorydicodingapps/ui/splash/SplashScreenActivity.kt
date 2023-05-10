@@ -12,7 +12,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.fajar.mystorydicodingapps.databinding.ActivitySplashScreenBinding
-import com.fajar.mystorydicodingapps.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.data.local.datastore.UserPreference
 import com.fajar.mystorydicodingapps.ui.login.LoginViewModel
 import com.fajar.mystorydicodingapps.ui.main.MainActivity
 import com.fajar.mystorydicodingapps.ui.register.RegisterActivity

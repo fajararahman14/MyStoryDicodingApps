@@ -1,7 +1,7 @@
 package com.fajar.mystorydicodingapps.network
 
 import com.fajar.mystorydicodingapps.BuildConfig
-import com.fajar.mystorydicodingapps.BuildConfig.BASE_URL
+import com.fajar.mystorydicodingapps.BuildConfig.API_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,7 +20,7 @@ class ApiConfig {
                 .addInterceptor(loggingInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

@@ -2,7 +2,7 @@ package com.fajar.mystorydicodingapps.viewmodelfactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.fajar.mystorydicodingapps.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.data.local.datastore.UserPreference
 import com.fajar.mystorydicodingapps.ui.login.LoginViewModel
 import com.fajar.mystorydicodingapps.ui.main.MainViewModel
 

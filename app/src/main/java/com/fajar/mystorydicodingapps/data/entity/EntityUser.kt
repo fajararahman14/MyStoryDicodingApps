@@ -1,4 +1,4 @@
-package com.fajar.mystorydicodingapps.entity
+package com.fajar.mystorydicodingapps.data.entity
 
 data class EntityUser(
     val name : String,

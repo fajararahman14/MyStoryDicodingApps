@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.fajar.mystorydicodingapps.R
 import com.fajar.mystorydicodingapps.Result
 import com.fajar.mystorydicodingapps.databinding.ActivityMainBinding
-import com.fajar.mystorydicodingapps.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.data.local.datastore.UserPreference
 import com.fajar.mystorydicodingapps.ui.login.LoginActivity
 import com.fajar.mystorydicodingapps.ui.maps.MapsActivity
 import com.fajar.mystorydicodingapps.ui.story.AddStoryActivity

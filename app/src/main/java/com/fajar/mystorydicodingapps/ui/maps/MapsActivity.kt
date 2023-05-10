@@ -15,7 +15,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.fajar.mystorydicodingapps.R
 import com.fajar.mystorydicodingapps.databinding.ActivityMapsBinding
-import com.fajar.mystorydicodingapps.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.data.local.datastore.UserPreference
 import com.fajar.mystorydicodingapps.network.story.StoryItem
 import com.fajar.mystorydicodingapps.ui.main.MainViewModel
 import com.fajar.mystorydicodingapps.viewmodelfactory.ViewModelFactory
