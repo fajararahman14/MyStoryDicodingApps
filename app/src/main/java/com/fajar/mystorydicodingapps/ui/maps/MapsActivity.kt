@@ -14,8 +14,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.fajar.mystorydicodingapps.R
-import com.fajar.mystorydicodingapps.databinding.ActivityMapsBinding
 import com.fajar.mystorydicodingapps.data.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.databinding.ActivityMapsBinding
 import com.fajar.mystorydicodingapps.network.story.StoryItem
 import com.fajar.mystorydicodingapps.ui.main.MainViewModel
 import com.fajar.mystorydicodingapps.viewmodelfactory.ViewModelFactory
@@ -68,16 +68,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             mapFragment.getMapAsync(this)
         }
     }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true

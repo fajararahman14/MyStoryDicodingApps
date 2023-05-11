@@ -5,23 +5,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fajar.mystorydicodingapps.R
-import com.fajar.mystorydicodingapps.Result
-import com.fajar.mystorydicodingapps.databinding.ActivityMainBinding
+import com.fajar.mystorydicodingapps.adapter.ListStoryAdapter
 import com.fajar.mystorydicodingapps.data.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.databinding.ActivityMainBinding
 import com.fajar.mystorydicodingapps.ui.login.LoginActivity
 import com.fajar.mystorydicodingapps.ui.maps.MapsActivity
 import com.fajar.mystorydicodingapps.ui.story.AddStoryActivity
+import com.fajar.mystorydicodingapps.utils.LoadingStateAdapter
 import com.fajar.mystorydicodingapps.viewmodelfactory.StoryViewModelFactory
 import com.fajar.mystorydicodingapps.viewmodelfactory.ViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -37,42 +40,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         setupViewModel()
         val storyAdapter = ListStoryAdapter()
 
-
         val factory: StoryViewModelFactory = StoryViewModelFactory.getInstance(this)
-        val storyViewModel: StoryViewModel by viewModels {
-            factory
-        }
+        val storyViewModel = ViewModelProvider(this, factory).get(StoryViewModel::class.java)
 
-        mainViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(
-                UserPreference.getInstance(dataStore)
-            )
-        )[MainViewModel::class.java]
+        mainViewModel = ViewModelProvider(this, ViewModelFactory(UserPreference.getInstance(dataStore)))[MainViewModel::class.java]
 
         mainViewModel.getUser().observe(this) { user ->
             if (user.isLogin) {
                 binding.tvTitle.text = "Welcome,\n${user.name}"
 
-                storyViewModel.getAllStories("Bearer ${user.token}").observe(this) { result ->
-                    when (result) {
-                        is Result.Loading -> {
-                            showLoading(true)
-                        }
-
-                        is Result.Success -> {
-                            showLoading(false)
-                            val storyData = result.data
-                            storyAdapter.submitList(storyData)
-                        }
-
-                        is Result.Error -> {
-                            showLoading(false)
-                        }
+                lifecycleScope.launch {
+                    storyViewModel.getAllStories("Bearer ${user.token}").collectLatest { pagingData ->
+                        storyAdapter.submitData(pagingData)
                     }
                 }
             } else {
@@ -81,22 +63,18 @@ class MainActivity : AppCompatActivity() {
                 finish()
             }
         }
+
         binding.rvStory.apply {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
-            adapter = storyAdapter
-        }
-
-    }
-
-
-    private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
+            adapter = storyAdapter.withLoadStateHeaderAndFooter(
+                header = LoadingStateAdapter { storyAdapter.retry() },
+                footer = LoadingStateAdapter { storyAdapter.retry() }
+            )
         }
     }
+
+
 
     private fun setupViewModel() {
         mainViewModel = ViewModelProvider(

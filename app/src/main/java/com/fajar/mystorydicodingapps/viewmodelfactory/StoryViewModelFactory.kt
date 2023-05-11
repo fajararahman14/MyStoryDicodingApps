@@ -27,7 +27,7 @@ class StoryViewModelFactory(
 
         fun getInstance(context: Context): StoryViewModelFactory =
             instance ?: synchronized(this) {
-                instance ?: StoryViewModelFactory(Injection.provideRepository())
+                instance ?: StoryViewModelFactory(Injection.provideRepository(context))
             }.also { instance = it }
     }
 

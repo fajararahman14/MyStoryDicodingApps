@@ -23,8 +23,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.fajar.mystorydicodingapps.R
 import com.fajar.mystorydicodingapps.Result
-import com.fajar.mystorydicodingapps.databinding.ActivityAddStoryBinding
 import com.fajar.mystorydicodingapps.data.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.databinding.ActivityAddStoryBinding
 import com.fajar.mystorydicodingapps.ui.main.MainActivity
 import com.fajar.mystorydicodingapps.ui.main.MainViewModel
 import com.fajar.mystorydicodingapps.utils.reduceFileImage
@@ -285,12 +285,6 @@ class AddStoryActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun allPermissionGranted() = REQUIRED_PERMISSION.all {
-        ContextCompat.checkSelfPermission(
-            baseContext,
-            it
-        ) == PackageManager.PERMISSION_GRANTED
-    }
 
     private fun setupViewModel() {
         mainViewModel = ViewModelProvider(

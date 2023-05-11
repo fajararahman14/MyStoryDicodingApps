@@ -1,68 +1,42 @@
 package com.fajar.mystorydicodingapps
 
-import android.content.ContentValues.TAG
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.fajar.mystorydicodingapps.data.StoryRemoteMediator
+import com.fajar.mystorydicodingapps.data.local.room.StoryDatabase
 import com.fajar.mystorydicodingapps.network.ApiService
 import com.fajar.mystorydicodingapps.network.story.StoryItem
-import com.fajar.mystorydicodingapps.network.story.StoryResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.flow.Flow
 
+@OptIn(ExperimentalPagingApi::class)
 class StoryRepository private constructor(
     private val apiService: ApiService,
+    private val storyDatabase: StoryDatabase,
 ) {
-    private val result = MediatorLiveData<Result<List<StoryItem>>>()
-    val errorMessage = MutableLiveData<String>()
 
-    fun getAllStories(token: String): LiveData<Result<List<StoryItem>>> {
-        result.value = Result.Loading
-        val client = apiService.getAllStories(token, null, null)
-        client.enqueue(object : Callback<StoryResponse> {
-            override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
-                if (response.isSuccessful) {
-                    val story = response.body()?.listStory
-                    val storiesList = ArrayList<StoryItem>()
-                    story?.forEach { story ->
-                        val stories = StoryItem(
-                            story.id,
-                            story.name,
-                            story.description,
-                            story.photoUrl,
-                            story.createdAt,
-                            story.lat,
-                            story.lon,
-                        )
-                        storiesList.add(stories)
-                    }
-                    result.value = Result.Success(storiesList)
-                } else {
-                    result.value = Result.Error(response.message())
-                    Log.e(TAG, response.message())
-                }
-            }
-
-            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-                result.value = Result.Error(t.message.toString())
-                Log.e(TAG, t.message.toString())
-            }
-        })
-        return result
+    fun getsAllStories(token: String): Flow<PagingData<StoryItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            remoteMediator = StoryRemoteMediator(apiService, storyDatabase, token),
+            pagingSourceFactory = { storyDatabase.storyDao().getStories() }
+        ).flow
     }
-
 
 
     companion object {
         @Volatile
         private var instance: StoryRepository? = null
         fun getInstance(
-            apiService: ApiService
+            apiService: ApiService,
+            storyDatabase: StoryDatabase
         ): StoryRepository =
             instance ?: synchronized(this) {
-                instance ?: StoryRepository(apiService)
+                instance ?: StoryRepository(apiService,storyDatabase)
             }.also { instance = it }
     }
 }

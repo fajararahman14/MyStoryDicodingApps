@@ -47,4 +47,5 @@
     <string name="share_location">Share Location ?</string>
     <string name="access_not_granted">Access is not Granted</string>
     <string name="add_string_failed">Failed to create story</string>
+    <string name="retry">Retry</string>
 </resources>

@@ -11,8 +11,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.fajar.mystorydicodingapps.R
-import com.fajar.mystorydicodingapps.databinding.ActivityLoginBinding
 import com.fajar.mystorydicodingapps.data.local.datastore.UserPreference
+import com.fajar.mystorydicodingapps.databinding.ActivityLoginBinding
 import com.fajar.mystorydicodingapps.ui.main.MainActivity
 import com.fajar.mystorydicodingapps.ui.register.RegisterActivity
 import com.fajar.mystorydicodingapps.viewmodelfactory.ViewModelFactory
